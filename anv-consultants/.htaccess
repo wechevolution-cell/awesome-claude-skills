@@ -1,0 +1,54 @@
+# ANV — Apache / LiteSpeed (Hostinger)
+Options -Indexes -MultiViews
+DirectoryIndex index.php
+AddDefaultCharset UTF-8
+
+<IfModule mod_rewrite.c>
+  RewriteEngine On
+  RewriteBase /
+
+  # --- HTTPS + non-www -------------------------------------------------
+  # Ενεργοποιήστε τις 4 γραμμές ΜΟΝΟ αφού λειτουργεί το SSL (Hostinger → SSL).
+  # (Εναλλακτικά: Admin → Ρυθμίσεις → Κανονικό URL, που κάνει το ίδιο από PHP.)
+  # RewriteCond %{HTTPS} off [OR]
+  # RewriteCond %{HTTP_HOST} ^www\. [NC]
+  # RewriteCond %{HTTP_HOST} ^(?:www\.)?(.+)$ [NC]
+  # RewriteRule ^ https://%1%{REQUEST_URI} [L,R=301]
+
+  # --- Protected folders ------------------------------------------------
+  RewriteRule ^(app|data|views)(/|$) - [F,L]
+  RewriteRule (^|/)\.(?!well-known/) - [F,L]
+  RewriteRule \.(sqlite|sqlite-wal|sqlite-shm|sql|log|md|lock|bak|zip)$ - [F,L,NC]
+
+  # --- No PHP execution from uploads -----------------------------------
+  RewriteRule ^uploads/.*\.(php\d?|phtml|phar|pl|py|cgi|sh)$ - [F,L,NC]
+
+  # --- Front controller -------------------------------------------------
+  RewriteCond %{REQUEST_FILENAME} -f
+  RewriteCond %{REQUEST_URI} ^/(assets|uploads)/ [OR]
+  RewriteCond %{REQUEST_URI} ^/(favicon\.ico|google[0-9a-f]+\.html)$
+  RewriteRule ^ - [L]
+  RewriteRule ^ index.php [L,QSA]
+</IfModule>
+
+<IfModule mod_headers.c>
+  Header always set X-Content-Type-Options "nosniff"
+  Header always set Referrer-Policy "strict-origin-when-cross-origin"
+  <FilesMatch "\.(css|js|woff2|svg|png|jpe?g|webp|gif|avif|ico)$">
+    Header set Cache-Control "public, max-age=31536000, immutable"
+  </FilesMatch>
+</IfModule>
+
+<IfModule mod_deflate.c>
+  AddOutputFilterByType DEFLATE text/html text/plain text/css application/javascript application/json application/xml application/rss+xml image/svg+xml
+</IfModule>
+
+<IfModule mod_mime.c>
+  AddType font/woff2 .woff2
+  AddType image/webp .webp
+  AddType image/avif .avif
+</IfModule>
+
+<FilesMatch "\.(sqlite|sqlite-wal|sqlite-shm|log|md|lock)$">
+  Require all denied
+</FilesMatch>

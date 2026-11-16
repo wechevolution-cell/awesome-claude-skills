@@ -1,0 +1,1 @@
+<nav aria-label="Διαδρομή"><ol class="crumbs"><?php $i = 0; $n = count($crumbs); foreach ($crumbs as $label => $href): $i++; ?><li><?php if ($i < $n): ?><a href="<?= e($href) ?>"><?= e($label) ?></a><?php else: ?><span aria-current="page"><?= e($label) ?></span><?php endif ?></li><?php endforeach ?></ol></nav>

@@ -1,0 +1,9 @@
+site/app/config.php
+site/data/*
+!site/data/.htaccess
+!site/data/index.html
+site/uploads/*
+!site/uploads/.htaccess
+!site/uploads/index.html
+dist/
+tests/output/

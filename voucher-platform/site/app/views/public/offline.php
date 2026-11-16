@@ -1,0 +1,1 @@
+<div class="offline"><div><h1 class="disp h2">Χωρίς σύνδεση</h1><p class="lead" style="margin:12px auto">Έλεγξε τη σύνδεσή σου στο internet. Οι κωδικοί που άνοιξες πρόσφατα μπορεί να φαίνονται ακόμα από το «Κωδικοί».</p><a class="btn" href="/">Δοκίμασε ξανά</a></div></div>
